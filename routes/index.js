@@ -28,7 +28,7 @@ router.post('/login', function (req, res) {
          var options = { "username": req.body.pseudo, "error": null };
          if (!req.body.pseudo) {
             options.error = "User name is required";
-            res.render('/login', options);
+            res.render('login', options);
          } else {
             User.findOne({ 'pseudo': req.body.pseudo, 'password': req.body.password })
             .populate('amis','pseudo')

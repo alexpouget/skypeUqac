@@ -79,7 +79,7 @@ io.on('connection', function(socket,pseudo){
             console.log('message: ' + msg.message + ' de la part de '+ socket.pseudo);
             console.log(msg.conversation);
             msg.conversation.participants.forEach(function(element){
-                console.log('particpants ' +element);
+                console.log('particpants ' + element);
                 console.log(clientMap.get(element));
                 if(socket.idUser!=element){
                     socket.to(clientMap.get(element)).emit('message', msg.message);
