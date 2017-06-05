@@ -28,6 +28,7 @@ router.post('/login', function (req, res) {
          var options = { "username": req.body.pseudo, "error": null };
          if (!req.body.pseudo) {
             options.error = "User name is required";
+            console.log("try to connect");
             res.render('login', options);
          } else {
             User.findOne({ 'pseudo': req.body.pseudo, 'password': req.body.password })

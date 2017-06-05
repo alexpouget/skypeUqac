@@ -5,9 +5,11 @@
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
             <title>Skype uqac</title>
-            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel='stylesheet'>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+                <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
                 <link rel="stylesheet" href="/stylesheets/messenger.css">
                     <script type='text/javascript' src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+                    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
                     <script type='text/javascript' src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
                     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
                     <script type="text/javascript" src="/js/bootstrap-notify.min.js"></script>
@@ -30,11 +32,9 @@
                                 <button class="btn btn-default" id="addFriend"><i class="glyphicon glyphicon-plus"></i> Add friend</button>
                             </span>
                         </div>
-                        <p><strong><u>Amis :</u></strong> <% if (amis) { %><%-amis.length%><% } %></p>
-                        <% if (amis) { for(var i=0; i<amis.length; i++){%>
-                        <p><%-amis[i].pseudo%></p>
-                        <% } } %>
-                    </a>
+                        <div id="friends-group" class="list-group">
+                        </div>
+                        </a>
                     <a href="#" class="list-group-item chat-request">
                         <div class="input-group">
                         <input type="text" class="form-control" placeholder="Conversation name" id="conversationInput" name="conversation" required>
@@ -122,14 +122,40 @@
     })
     
     //Friend
-    
+    var friends =[]
+    var friendsAutocomplete = [];
+    function getFriends(){
+        friendsAutocomplete = [];
+        $.get("/user/friend/"+mysession.idUser,function( data ) {friends = data }, "json");
+        displayListFriends();
+        friends.forEach(function(element){
+            friendsAutocomplete.push(element.pseudo);
+        });
+    }
+    getFriends()
+    function displayListFriends() {
+        $('#friends-group').html('<strong><u>Amis : </u></strong>'+ friends.length);
+        var i = 0;
+        friends.forEach(function(element){
+            $('#friends-group').append('<p>'+element.pseudo+'</p>');
+            i++;
+        });
+    }
     //Add friend change name to id with autocomplete add need id
     $('#addFriend').click(function() {
         var friendName = document.getElementById('friendInput').value;
+        users.forEach(function(element){
+            if(element.pseudo == friendName){
+                friendName = element._id;
+                break;
+             }
+        });
         $.post( "/user/friend/"+mysession.idUser, {id: friendName });
+        friendName = document.getElementById('friendInput').value;
         $.notify({title: '<strong>Friends!</strong><br>',message: 'You are now friends with :' +friendName},{type: 'success'});
         document.getElementById('friendInput').value = "";
-        location.reload();
+        getFriends()
+        displayListFriends();
     })
     
     //conversation
@@ -156,7 +182,7 @@
         $.get("/conversation/user/"+mysession.idUser,function( data ) {conversations = data }, "json");
         displayListConversation();
     }
-getConversations();
+    getConversations();
     //create conversation
     $('#addConversation').click(function() {
         var conversationName = document.getElementById('conversationInput').value;
@@ -197,13 +223,44 @@ getConversations();
     //add participant to conv
     $('#addParticipant').click(function() {
         var friendName = document.getElementById('participantInput').value;
+        friends.forEach(function(element){
+                               if(element.pseudo == friendName){
+                                    friendName = element._id;
+                                }
+                        });
             $.post( "/conversation/addParticipants/"+conversation._id, {name: friendName });
+            friendName = document.getElementById('participantInput').value;
             $.notify({title: '<strong>Friends!</strong><br>',message:  friendName +' is added to conversation : '+ conversation.name},{type: 'success'});
             document.getElementById('participantInput').value = "";
             getConversations();
             displayConversation();
     })
-
     
+    //autocomplete
+    $( "#participantInput" ).autocomplete({
+                                          source: friendsAutocomplete,
+                                          autoFocus: true
+                                          });
+                                          
+   
+       userAutocomplete = [];
+       var users = [];
+       $.get("/user/",function( data ) {
+             users = data;
+             data.forEach(function(element){
+                    if(data._id!=mysession.idUser){
+                          userAutocomplete.push(element.pseudo);
+                    }
+            });
+             }, "json");
+       
+       
+    $( "#friendInput" ).autocomplete({
+                                          source: userAutocomplete,
+                                          autoFocus: true
+                                          });
+    
+
+
     
 </script>
