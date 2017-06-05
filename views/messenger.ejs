@@ -49,11 +49,6 @@
                     </a>
                     
                 </div>
-                <!--<div class="col-md-12">
-                    <a href="#" class="list-group-item">TeamSupport</a>
-                    <a href="#" class="list-group-item list-group-item-success">About</a>
-                    <a href="#" class="list-group-item active">Autre</a>
-                </div>-->
             </div>
         </div>
         <div class="col-md-9 current-chat">
@@ -106,6 +101,14 @@
               socket.emit('new user', mysession);
         console.log("connection socket reussi.");
     });
+    socket.on('friend', function() {
+              getFriends();
+              $.notify({title: '<strong>Friend!</strong><br>',message: 'You have a new friend!'},{type: 'info'});
+              })
+    socket.on('conversation', function() {
+              getConversations();
+              $.notify({title: '<strong>Conversation!</strong><br>',message: 'You have a new conversation!'},{type: 'info'});
+                        })
     
     //Message
     socket.on('message', function(message) {
@@ -151,6 +154,7 @@
              }
         });
         $.post( "/user/friend/"+mysession.idUser, {id: friendName });
+        socket.emit('friend', {friend: friendName});
         friendName = document.getElementById('friendInput').value;
         $.notify({title: '<strong>Friends!</strong><br>',message: 'You are now friends with :' +friendName},{type: 'success'});
         document.getElementById('friendInput').value = "";
@@ -229,6 +233,7 @@
                                 }
                         });
             $.post( "/conversation/addParticipants/"+conversation._id, {name: friendName });
+            socket.emit('conversation', {friend: friendName});
             friendName = document.getElementById('participantInput').value;
             $.notify({title: '<strong>Friends!</strong><br>',message:  friendName +' is added to conversation : '+ conversation.name},{type: 'success'});
             document.getElementById('participantInput').value = "";

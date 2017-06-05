@@ -76,16 +76,18 @@ io.on('connection', function(socket,pseudo){
                 console.log(clientMap.get(pseudo));
                 });
       socket.on('message', function(msg){
-            console.log('message: ' + msg.message + ' de la part de '+ socket.pseudo);
-            console.log(msg.conversation);
             msg.conversation.participants.forEach(function(element){
-                console.log('particpants ' + element);
-                console.log(clientMap.get(element));
                 if(socket.idUser!=element){
                     socket.to(clientMap.get(element)).emit('message', msg.message);
                 }
             });
         });
+      socket.on('friend', function(msg){
+                socket.to(clientMap.get(msg.friend)).emit('friend');
+      });
+      socket.on('conversation', function(msg){
+                socket.to(clientMap.get(msg.friend)).emit('conversation');
+      });
       
       socket.on('disconnect', function () {
                 console.log('a user disconnected');
