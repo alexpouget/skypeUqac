@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html >
 <head>
-  <meta charset="UTF-8">
-  <title>Connexion à Skype Uqac</title>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-  <link rel='stylesheet prefetch' href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900">
-  <link rel='stylesheet prefetch' href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/stylesheets/style.css">
-  
+	<meta charset="UTF-8">
+	<title>Connexion à Skype Uqac</title>
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+	<link rel='stylesheet prefetch' href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900">
+	<link rel='stylesheet prefetch' href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/stylesheets/style.css">
+	
 </head>
 <body>
   <div class="pen-title">
@@ -29,10 +29,10 @@
     </div>
     <div class="form">
       <h2>Crée un compte</h2>
-      <form methode="post" onsubmit="return identification()" id="creation">
-        <input type="text" placeholder="Pseudo" id="pseudo" />
-        <input type="password" placeholder="Password" id="password" />
-        <input type="email" placeholder="Email" id="mail" />
+      <form method="post" action='/inscription' onsubmit="return identification()" id="creation">
+        <input type="text" placeholder="Pseudo" id="pseudo" name="pseudo" />
+        <input type="password" placeholder="Password" id="password" name="password" />
+        <input type="email" placeholder="Email" id="email" name="email" />
         <input type="submit" value="S'inscrire" />
       </form>
     </div>
@@ -72,33 +72,33 @@
       return bool;
     }
 
-    function identification(){
-      bool = true;
-      pseudo = document.forms['creation'].elements['pseudo'].value;
-      pwd = document.forms['creation'].elements['password'].value;
-      mail = document.forms['creation'].elements['mail'].value;
-      regex1 = /^[a-zA-Z0-9]{3,16}$/;
-      regex2 = /^[a-zA-Z0-9]{6,12}$/;
-      regex3 = /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/;
-      if(!regex1.test(pseudo)) {
-        alert("Votre pseudo doit être compris entre 3 et 16 charactères alphanumérique");
-        bool = false;
-      }
-      if(bool){
-        if(!regex2.test(pwd)){
-          alert("Votre mot de passe doit être compris entre 6 et 12 charactères alphanumérique");
-          bool = false;
-        }
-      }
-      if(bool){
-        if(!regex3.test(mail)){
-          alert("Votre adresse mail n'est pas valide (ex : prenom.nom@gmail.com)");
-          bool = false;
-        }
-      }
-      return bool;
-    }
-    //]]>
-  </script>
+		function inscription(){
+			bool = true;
+			pseudo = document.forms['creation'].elements['pseudo'].value;
+			pwd = document.forms['creation'].elements['password'].value;
+			mail = document.forms['creation'].elements['mail'].value;
+			regex1 = /^[a-zA-Z0-9]{3,16}$/;
+			regex2 = /^[a-zA-Z0-9]{6,12}$/;
+			regex3 = /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/;
+			if(!regex1.test(pseudo)) {
+				alert("Votre pseudo doit être compris entre 3 et 16 charactères alphanumérique");
+				bool = false;
+			}
+			if(bool){
+				if(!regex2.test(pwd)){
+					alert("Votre mot de passe doit être compris entre 6 et 12 charactères alphanumérique");
+					bool = false;
+				}
+			}
+			if(bool){
+				if(!regex3.test(mail)){
+					alert("Votre adresse mail n'est pas valide (ex : prenom.nom@gmail.com)");
+					bool = false;
+				}
+			}
+			return bool;
+		}
+		//]]>
+	</script>
 </body>
 </html>

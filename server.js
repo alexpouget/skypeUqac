@@ -4,7 +4,7 @@ var express = require('express'),
     path = require('path'),
     app     = express(),
     mongoose = require('mongoose'),
-    eps     = require('ejs'),
+    ejs     = require('ejs'),
     morgan  = require('morgan'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
@@ -29,6 +29,7 @@ app.engine('html', require('ejs').renderFile);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 // Allow parsing cookies from request headers
 app.use(cookieParser());
 // Session management

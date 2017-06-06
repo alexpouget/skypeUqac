@@ -10,7 +10,6 @@ function requireLogin (req, res, next) {
         next();
     } else {
         // Otherwise, we redirect him to login form
-        
         res.redirect('/login');
     }
 }
@@ -24,13 +23,21 @@ router.get('/login', function (req, res) {
            res.render('login.ejs', { title: 'Login' });
            });
 
+router.get('/inscription', function (req, res) {
+           res.redirect('/login', { title: 'Login' });
+           });
+
 router.post('/login', function (req, res) {
-         var options = { "username": req.body.pseudo, "error": null };
-         if (!req.body.pseudo) {
+        console.log("tes1");
+        console.log(req.body.pseudo);
+        console.log(!req.body.pseudo);
+        console.log("tes2");
+        var options = { "username": req.body.pseudo, "error": null };
+        if (!req.body.pseudo) {
             options.error = "User name is required";
             console.log("try to connect");
             res.render('login', options);
-         } else {
+        }else {
             User.findOne({ 'pseudo': req.body.pseudo, 'password': req.body.password })
             .populate('amis','pseudo')
             .exec(function(err, obj) {
@@ -50,6 +57,31 @@ router.post('/login', function (req, res) {
                 }
             })
         }
+});
+
+router.post('/inscription', function(req, res){
+    //if(User.count({$or: [{'pseudo': req.body.pseudo}, {'email': req.body.mail }]}) == 0)
+    User.count({$or: [{'pseudo': req.body.pseudo}, {'email': req.body.mail }]}, function(err, data){
+        if(data == 0){
+            console.log("Test 0 : " + data);
+        }
+        else{
+            console.log("Test pas 0 : " + data);
+        }
+    });
+
+
+
+    /*if(User.count({'pseudo': req.body.pseudo}) > 0){
+        console.log("Test 22");
+    }
+    else{
+        console.log("Test 23");
+    }*/
+
+    //User.create(req.body);
+
+    res.redirect('/login');
 });
 
 
