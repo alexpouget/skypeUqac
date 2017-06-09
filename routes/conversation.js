@@ -38,6 +38,7 @@ router.get('/user/:id', function(req, res, next) {
                                  });
            });
 
+
 // Post exemple
 router.post('/', function(req, res, next) {
             Conversation.create(req.body, function (err, post) {

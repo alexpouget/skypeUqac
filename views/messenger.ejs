@@ -150,7 +150,6 @@
         users.forEach(function(element){
             if(element.pseudo == friendName){
                 friendName = element._id;
-                break;
              }
         });
         $.post( "/user/friend/"+mysession.idUser, {id: friendName });

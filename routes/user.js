@@ -61,8 +61,16 @@ router.post('/', function(req, res, next) {
             });
 
 
-
-
+// Post connexion
+router.post('/login', function (req, res) {
+            User.findOne({ 'pseudo': req.body.pseudo, 'password': req.body.password })
+            .populate('amis')
+            .exec(function(err, obj) {
+                if (err) return next(err);
+                  console.log(obj);
+                res.json(obj);
+            });
+});
 
 /* PUT /todos/:id */
 router.put('/:id', function(req, res, next) {
