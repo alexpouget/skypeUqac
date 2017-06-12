@@ -38,6 +38,15 @@ router.get('/user/:id', function(req, res, next) {
                                  });
            });
 
+// get all  messages from conversation
+router.get('/message/:id', function(req, res, next) {
+            Conversation.findById(req.params.id, function (err, conv){
+                if (err) return next(err);
+                res.json(conv.data);
+            }).populate({path:'data',populate:{path:'writer'}});
+});
+
+
 
 // Post exemple
 router.post('/', function(req, res, next) {

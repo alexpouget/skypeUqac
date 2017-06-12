@@ -23,7 +23,7 @@ router.get('/:id', function(req, res, next) {
 
 /* GET friend /todos/id */
 router.get('/friend/:id', function(req, res, next) {
-           User.findById(req.params.id).populate('amis', 'pseudo').exec(function (err, post){
+           User.findById(req.params.id).populate('amis').exec(function (err, post){
                          if (err) return next(err);
                          if(!post){ res.json(post)}
                          else { res.json(post.amis);}

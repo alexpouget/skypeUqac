@@ -18,6 +18,10 @@ var user = require('./routes/user');
 var message = require('./routes/message');
 var conversation = require('./routes/conversation');
 //var login = require('./routes/login');
+//add modeles files
+var Conversation = require('./models/Conversation.js');
+var User = require('./models/User.js');
+var Message = require('./models/Message.js');
     
 //Object.assign=require('object-assign')
 
@@ -83,6 +87,18 @@ io.on('connection', function(socket,pseudo){
                 }
             });
         });
+      
+      socket.on('messageIphone', function(msg){
+                Conversation.findById(msg.conversation, function (err, post){
+                    if (err) return next(err);
+                    post.participants.forEach(function(element){
+                        if(socket.idUser!=element.id){
+                            console.log("testmessageiphone2")
+                            console.log(element)
+                            socket.to(clientMap.get(element.id)).emit('message', msg.message);
+                        }
+                    });                }).populate({path:'participants'}).populate({path:'data',populate:{path:'writer',select:'pseudo'}});
+                });
       socket.on('friend', function(msg){
                 socket.to(clientMap.get(msg.friend)).emit('friend');
       });

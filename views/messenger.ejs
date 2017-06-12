@@ -74,6 +74,7 @@
                 <div class="panel-footer">
                     <div class="input-group">
                             <input type="text" class="form-control" placeholder="Type your message" id="messageInput" name="message" required>
+                            <!--<input type="file"><br>-->
                             <span class="input-group-btn">
                             <button class="btn btn-default" type="button" id="send" >Send</button>
                             </span>
@@ -264,7 +265,29 @@
                                           autoFocus: true
                                           });
     
+    /*file upload
+    var files;
+    $('input[type=file]').on('change', prepareUpload);
+    function prepareUpload(event)
+    {
+        files = event.target.files;
+        console.log(files[0])
 
+        var xhr = new XMLHttpRequest;
+        
+        xhr.open("POST", "/conversation/message/Files/"+mysession.idUser, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                alert(xhr.responseText);
+            }
+        };
+        var contentType = "multipart/form-data";
+        xhr.setRequestHeader("Content-Type", contentType);
+        
+        // finally send the request as binary data
+        xhr.sendAsBinary(files[0]);
+        
+    }*/
 
     
 </script>
